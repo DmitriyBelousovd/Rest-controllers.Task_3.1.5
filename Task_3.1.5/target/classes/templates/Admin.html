@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <style>
+        .btn-custom1 {
+            background-color: whitesmoke;
+            border-radius: 5px 5px 0 0;
+            color: dodgerblue;
+            height: 50px;
+            width: 140px;
+            font-size: 20px;
+        }
+
+        .btn-custom1.active {
+            border-color: #D3D3D3;
+            background-color: white;
+            color: dimgray;
+        }
+
+        .custom-btn {
+            background-color: white;
+            border-radius: 5px;
+            color: dodgerblue;
+            font-size: 20px;
+            text-align: left;
+        }
+
+        .custom-btn.active {
+            background-color: dodgerblue;
+            color: white;
+        }
+
+        .tbody tr {
+            line-height: 30px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="container-fluid">
+    <nav class="row bg-dark" style="height: 60px">
+        <div class="ml-4">
+            <a style="color: white; font-size: 20px; line-height: 60px; font-weight: bold ">
+                <span id="navbarEmail"></span></a>
+        </div>
+        <div class="ml-4">
+            <a style="color: white; font-size: 20px; line-height: 60px; "> with roles:
+                <span id="navbarRoles"></span></a>
+        </div>
+        <div class="ml-auto mr-4 text-secondary">
+            <a href="/logout" style="color: grey;font-size: 20px; line-height: 60px; "> logout</a>
+        </div>
+    </nav>
+
+    <div class="row vh-100">
+        <div class="col-md-2 mt-3 px-0">
+            <div class="btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-lg btn-block custom-btn active" id="adminButton">
+                    <input type="radio" name="options"> Admin
+                </label>
+                <label class="btn btn-lg btn-block custom-btn" id="userButton">
+                    <input type="radio" name="options"> User
+                </label>
+            </div>
+        </div>
+        <!-- Admin panel-->
+        <div class="col-md-10 p-4" style="background-color: whitesmoke" id="adminPanel">
+            <div class="ml-4">
+                <H1>
+                    Admin panel
+                </H1>
+                <div class="btn-group btn-group-toggle mt-3" data-toggle="buttons">
+                    <label class="btn btn-custom1 active" id="userTableButton">
+                        <input type="radio" name="options" autocomplete="off"> Users table
+                    </label>
+                    <label class="btn btn-custom1" id="newUserButton">
+                        <input type="radio" name="options" autocomplete="off"> New User
+                    </label>
+                </div>
+            </div>
+
+            <div class="px-4" style="background-color: whitesmoke" id="adminPanel2">
+                <div class="border pt-2 rounded-right rounded-bottom" style="background-color: whitesmoke">
+                    <h3 class="ml-4" style="height: 40px">
+                        All users
+                    </h3>
+                    <div class="border-top" style="background-color: white">
+                        <div class="p-4 border-top">
+                            <table class="table table-striped"
+                                   style="background-color: white"
+                                   id="allUsersTable">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Role</th>
+                                    <th style="width: 7%">Edit</th>
+                                    <th style="width: 7%">Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody id="allUsersTbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Add new user-->
+            <div class="px-4" style="background-color: whitesmoke; display: none" id="addNewUser">
+                <div class="border pt-2 rounded">
+                    <h3 class="ml-4" style="height: 40px">
+                        Add new user
+                    </h3>
+                    <div style="background-color: white">
+                        <div class="d-flex justify-content-center">
+                            <form method="post" id="addNewUserForm"
+                                  style="width: 400px; margin: auto; text-align: center;">
+                                <div class="form-group">
+                                    <label for="username" style="font-weight: bold;">Username:</label>
+                                    <input class="form-control" type="text" id="username" name="username"
+                                           placeholder="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" style="font-weight: bold;">Password:</label>
+                                    <input class="form-control" type="password" id="password" name="password"
+                                           placeholder="password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="firstName" style="font-weight: bold;">First Name:</label>
+                                    <input class="form-control" type="text" id="firstName" name="firstName"
+                                           placeholder="First name" required pattern="[A-Za-z]+" title="Please enter a valid last name (only letters)" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName" style="font-weight: bold;">Last Name:</label>
+                                    <input class="form-control" type="text" id="lastName" name="lastName"
+                                           placeholder="Last name" required pattern="[A-Za-z]+" title="Please enter a valid last name (only letters)" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" style="font-weight: bold;">Email:</label>
+                                    <input class="form-control" type="email" id="email" name="email"
+                                           placeholder="Email" required>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Role</label>
+                                    <select id="rolesSelector"
+                                            class="form-control"
+                                            multiple name="roles"
+                                            required>
+                                        <option>
+                                        </option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-lg btn-success m-4"
+                                        type="submit">Add new user
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User info-->
+        <div class="col-md-10 p-4" style="background-color: whitesmoke; display: none" id="userInfo">
+            <div>
+                <H1 class="ml-4">
+                    User information-page
+                </H1>
+                <div class="border pt-2 rounded m-4" style="background-color: whitesmoke">
+                    <h3 class="ml-4" style="height: 40px">
+                        About user
+                    </h3>
+                    <div class="border-top" style="background-color: white">
+                        <div class="p-4 border-top">
+                            <table class="table table-striped" style="background-color: white">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Role</th>
+
+                                </tr>
+                                </thead>
+                                <tbody id="userTbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" tabindex="-1"
+     role="dialog" aria-labelledby="editModalTitle"
+     aria-hidden="true" id="editModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalTitle">Edit user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body row justify-content-center">
+                <form method="post"
+                      class="font-weight-bold text-center text-center col-md-8"
+                      id="editUserForm">
+                    <div class="form-group">
+                        <label>Id:</label>
+                        <input readonly class="form-control-plaintext bg-light" type="text"
+
+                               name="id"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Username:</label>
+                        <input class="form-control" type="text"
+                               name="username" required
+                               value="username"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input class="form-control" type="password"
+                               name="password"
+                               autocomplete="on">
+                    </div>
+                    <div class="form-group">
+                        <label>First Name:</label>
+                        <input class="form-control" type="text"
+                               name="firstName" required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name:</label>
+                        <input class="form-control" type="text"
+                               name="lastName" required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input class="form-control" type="email"
+                               name="email" required
+                        >
+                    </div>
+                    <div>
+                        <label class="font-weight-bold">Role</label>
+                        <select class="form-control"
+                                multiple name="roles"
+                                id="rolesEdit"
+                                required>
+                            <option>
+                            </option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="ml-auto mr-3 border-top">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal delete -->
+<div class="modal fade" tabindex="-1"
+     role="dialog" aria-labelledby="deleteModalTitle"
+     aria-hidden="true"
+     id="deleteModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalTitle">Delete user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body row justify-content-center">
+                <form method="post" class="font-weight-bold text-center col-md-8"
+                      id="deleteUserForm">
+                    <div class="form-group">
+                        <label>Id:</label>
+                        <input readonly class="form-control-plaintext bg-light" type="text"
+
+                               name="id"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Username:</label>
+                        <input readonly class="form-control-plaintext bg-light" type="text"
+
+                               name="username" required
+                        >
+                    </div>
+                    <div class="invisible-div" style="display: none;">
+                        <label>Password:</label>
+                        <input readonly class="form-control-plaintext bg-light" type="hidden"
+
+                               name="password" required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>First Name:</label>
+                        <input readonly class="form-control-plaintext bg-light" type="text"
+
+                               name="firstName" required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name:</label>
+                        <input readonly class="form-control-plaintext bg-light" type="text"
+
+                               name="lastName" required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input readonly class="form-control-plaintext bg-light" type="email"
+
+                               name="email" required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label>Roles:</label>
+                        <select readonly class="form-control-plaintext bg-light"
+                                name="roles" multiple="multiple" required
+                                id="rolesDelete">
+                            <option></option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="ml-auto mr-3 border-top">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn"
+                                    style="background-color: #ea3e3e;
+                                    border-color: #ea3e3e;
+                                    color: white">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+
+<script type="module" th:src="@{/admin.js}"></script>
+<script type="module" th:src="@{/UserInfo.js}"></script>
+</body>
+</html>
